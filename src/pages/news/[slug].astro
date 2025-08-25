@@ -1,0 +1,156 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { createClient } from 'microcms-js-sdk';
+import { format } from 'date-fns';
+import type { News, MicroCMSListResponse } from '../../types/microcms.d.ts';
+
+const { slug } = Astro.params;
+
+// ページのレンダリング部分で使用するためのclient
+const client = createClient({
+  serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.MICROCMS_API_KEY,
+});
+
+let newsArticle;
+try {
+  // ★重要★ ここを修正
+  const response = await client.get<MicroCMSListResponse<News>>({
+    endpoint: 'news',
+    queries: { filters: `slug[equals]${slug}` } // スラッグでフィルタリング
+  });
+  newsArticle = response.contents[0];
+} catch (error) {
+  console.error(`Failed to fetch news article for slug: ${slug}`, error);
+  return Astro.redirect('/404');
+}
+
+if (!newsArticle) {
+  return Astro.redirect('/404');
+}
+
+export async function getStaticPaths() {
+  const client = createClient({
+    serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
+    apiKey: import.meta.env.MICROCMS_API_KEY,
+  });
+
+  const newsResponse = await client.get<MicroCMSListResponse<News>>({
+    endpoint: 'news',
+    queries: { limit: 100 }
+  });
+
+  if (!newsResponse || !newsResponse.contents) {
+    return [];
+  }
+
+  return newsResponse.contents.map((news) => ({
+    params: { slug: news.slug },
+  }));
+}
+---
+<Layout title={`${newsArticle.title} | オプティエンス`}>
+  <main>
+    <section class="news-detail-container">
+      <div class="container">
+        <article class="news-article">
+          <h1 class="news-title">{newsArticle.title}</h1>
+          <p class="news-date">{format(new Date(newsArticle.publishedAt), 'yyyy.MM.dd')}</p>
+          {newsArticle.thumbnail && (
+            <img src={newsArticle.thumbnail.url} alt={newsArticle.title} class="news-thumbnail" />
+          )}
+          <div class="news-body" set:html={newsArticle.body} />
+          <div class="back-link">
+            <a href="/news" class="btn-back">最新情報一覧に戻る</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .news-detail-container {
+    padding: 60px 20px;
+  }
+  .news-article {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--background-color-light);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .news-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+  }
+  .news-date {
+    font-size: 0.9rem;
+    color: var(--text-color-light);
+    margin-bottom: 2rem;
+    display: block;
+  }
+  .news-thumbnail {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  .news-body :global(h2),
+  .news-body :global(h3),
+  .news-body :global(p),
+  .news-body :global(ul),
+  .news-body :global(ol) {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .news-body :global(h2) {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 3rem;
+  }
+  .news-body :global(h3) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 2rem;
+  }
+  .news-body :global(p) {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  .news-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .btn-back {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .btn-back:hover {
+    background-color: var(--primary-color);
+  }
+  @media (max-width: 768px) {
+    .news-title {
+      font-size: 2rem;
+    }
+  }
+</style>

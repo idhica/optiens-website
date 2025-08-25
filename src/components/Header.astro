@@ -1,0 +1,89 @@
+---
+// ここにフロントマター（JavaScript）のコードがあればそのままにします。
+---
+
+<header>
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img src="/images/optiens-logo.png" alt="オプティエンスロゴ" class="header-logo" />
+      </a>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/">ホーム</a></li>
+        <li><a href="/about-us">企業理念</a></li>
+        <li><a href="/solutions">ソリューション</a></li>
+        <li><a href="/news">ニュース</a></li>
+        <li><a href="/contact">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    background: linear-gradient(to right, #2e574c, #5ea89a);
+    color: #fff;
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .logo a {
+    display: block;
+  }
+  .header-logo {
+    height: 80px; /* ロゴの高さを指定。必要に応じて調整してください */
+  }
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  nav li {
+    margin-left: 30px;
+  }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  nav a:hover {
+    color: var(--primary-color);
+  }
+
+  /* レスポンシブ対応 */
+  @media (max-width: 768px) {
+    header .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    nav ul {
+      flex-direction: column;
+      width: 100%;
+      margin-top: 15px;
+    }
+    nav li {
+      margin: 10px 0;
+      width: 100%;
+    }
+    nav a {
+      display: block;
+      padding: 5px 0;
+    }
+  }
+</style>

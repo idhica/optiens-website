@@ -1,0 +1,145 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { createClient } from 'microcms-js-sdk';
+// ★修正★ ファイルパスとインポートの型名を再確認
+import type { Solutions, MicroCMSListResponse } from '../../types/microcms.d.ts';
+
+// `getStaticPaths`は静的サイト生成に必要な関数です
+export async function getStaticPaths() {
+  const client = createClient({
+    serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
+    apiKey: import.meta.env.MICROCMS_API_KEY,
+  });
+
+  const solutionsResponse = await client.get<MicroCMSListResponse<Solutions>>({
+    endpoint: 'solutions',
+    queries: { limit: 100 }
+  });
+
+  if (!solutionsResponse || !solutionsResponse.contents) {
+    return [];
+  }
+
+  // ★修正★ `solution`パラメータに型を明示
+  return solutionsResponse.contents.map((solution: Solutions) => ({
+    params: { slug: solution.slug },
+  }));
+}
+
+// ページのレンダリング部分で使用するためのclient
+const client = createClient({
+  serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.MICROCMS_API_KEY,
+});
+
+const { slug } = Astro.params;
+let solutionArticle;
+
+try {
+  const response = await client.get<MicroCMSListResponse<Solutions>>({
+    endpoint: 'solutions',
+    queries: { filters: `slug[equals]${slug}` }
+  });
+  solutionArticle = response.contents[0];
+} catch (error) {
+  console.error(`Failed to fetch solution article for slug: ${slug}`, error);
+  return Astro.redirect('/404');
+}
+
+if (!solutionArticle) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout title={`${solutionArticle.solutionName} | オプティエンス`}>
+  <main>
+    <section class="solution-detail-container">
+      <div class="container">
+        <article class="solution-article">
+          <h1 class="solution-title">{solutionArticle.solutionName}</h1>
+          {solutionArticle.image && (
+            <img src={solutionArticle.image.url} alt={solutionArticle.solutionName} class="solution-image" />
+          )}
+          <div class="solution-body" set:html={solutionArticle.body} />
+          <div class="back-link">
+            <a href="/solutions" class="btn-back">ソリューション一覧に戻る</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .solution-detail-container {
+    padding: 60px 20px;
+  }
+  .solution-article {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--background-color-light);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .solution-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-bottom: 1.5rem;
+  }
+  .solution-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  .solution-body :global(h2),
+  .solution-body :global(h3),
+  .solution-body :global(p),
+  .solution-body :global(ul),
+  .solution-body :global(ol) {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .solution-body :global(h2) {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 3rem;
+  }
+  .solution-body :global(h3) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-top: 2rem;
+  }
+  .solution-body :global(p) {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .btn-back {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .btn-back:hover {
+    background-color: var(--primary-color);
+  }
+  @media (max-width: 768px) {
+    .solution-title {
+      font-size: 2rem;
+    }
+  }
+</style>
