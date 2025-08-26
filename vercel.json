@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "https://www.ensotechlab.com/",
+      "destination": "https://optiens.com/",
+      "permanent": true
+    }
+  ]
+}
