@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "https://ensotechlab.com/",
+      "destination": "https://optiens.com/",
+      "permanent": true
+    },
+    {
       "source": "https://www.ensotechlab.com/",
       "destination": "https://optiens.com/",
       "permanent": true
