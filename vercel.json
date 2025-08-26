@@ -1,8 +1,8 @@
 {
   "redirects": [
     {
-      "source": "/:path*",
-      "destination": "https://optiens.com/:path*",
+      "source": "/",
+      "destination": "https://optiens.com/",
       "permanent": true,
       "has": [
         {
@@ -12,8 +12,8 @@
       ]
     },
     {
-      "source": "/:path*",
-      "destination": "https://optiens.com/:path*",
+      "source": "/",
+      "destination": "https://optiens.com/",
       "permanent": true,
       "has": [
         {
