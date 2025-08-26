@@ -1,9 +1,26 @@
 {
   "redirects": [
     {
-      "source": "/",
-      "destination": "https://optiens.com/",
-      "permanent": true
+      "source": "/:path*",
+      "destination": "https://optiens.com/:path*",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "ensotechlab.com"
+        }
+      ]
+    },
+    {
+      "source": "/:path*",
+      "destination": "https://optiens.com/:path*",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ensotechlab.com"
+        }
+      ]
     }
   ]
 }
