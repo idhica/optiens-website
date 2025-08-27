@@ -57,8 +57,7 @@ import Layout from '../layouts/Layout.astro';
     font-weight: bold;
     color: var(--heading-color);
   }
-  .form-group input[type="email"],
-  .form-group input[type="text"],
+  .form-group input,
   .form-group textarea {
     width: 100%;
     padding: 12px;
@@ -71,8 +70,22 @@ import Layout from '../layouts/Layout.astro';
   }
   .btn-primary {
     width: 100%;
-    padding: 15px;
+    padding: 15px 20px;
     font-size: 1.2em;
     cursor: pointer;
+    background: linear-gradient(135deg, #2e574c 0%, #5ea89a 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  .btn-primary:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+  }
+  .btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(46, 87, 76, 0.7);
   }
 </style>

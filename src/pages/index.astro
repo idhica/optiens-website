@@ -1,9 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { createClient } from 'microcms-js-sdk';
-import { format } from 'date-fns';
-import { stripHtmlTags } from '../utils/string';
-import type { News, MicroCMSListResponse, PageContent } from '../types/microcms.d.ts';
+import type { MicroCMSListResponse, PageContent } from '../types/microcms.d.ts';
 
 const client = createClient({
   serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
@@ -16,54 +14,13 @@ const pageResponse = await client.get<MicroCMSListResponse<PageContent>>({
 });
 const homePageContent: PageContent | null = pageResponse.contents[0] || null;
 
-const newsListResponse = await client.get<MicroCMSListResponse<News>>({
-  endpoint: 'news',
-  queries: {
-    limit: 3,
-    orders: '-publishedAt',
-    fields: 'id,slug,title,publishedAt,thumbnail,body'
-  }
-});
-const newsList: News[] = newsListResponse.contents || [];
-
 ---
 
-<Layout title="オプティエンス | AIx自然x人が織りなす持続可能な未来" description="AIテクノロジーと自然の調和を通じて、人々と地球が共に豊かになる未来を追求するオプティエンスの公式ウェブサイトです。">
+<Layout title="Optiens | 人と地球が共に豊かになる未来を追求" description="テクノロジーと自然の調和を通じて、人々と地球が共に豊かになる未来を追求するOptiensの公式ウェブサイトです。">
   <main>
     <section class="hero-container">
       <div class="hero-content">
-        <!-- <h1 class="hero-title">テクノロジーによる循環と調和</h1> -->
-        <p class="hero-lead">AIと自然の調和を通じて、人々と地球が共に豊かになる未来を追求します。</p>
-        <a href="/about-us" class="btn-primary hero-cta">企業理念</a>
-      </div>
-    </section>
-
-    <section class="latest-news-section">
-      <div class="container">
-        <h2>最新情報</h2>
-        {newsList.length > 0 ? (
-          <div class="news-list-container">
-            {newsList.map((news) => (
-              <article class="news-item-long">
-                {news.thumbnail && (
-                  <a href={`/news/${news.slug}`} class="news-thumbnail-link">
-                    <img src={news.thumbnail.url} alt={news.title} class="news-thumbnail-long" />
-                  </a>
-                )}
-                <div class="news-content-long">
-                  <p class="news-date">{format(new Date(news.publishedAt), 'yyyy.MM.dd')}</p>
-                  <h3 class="news-title-long"><a href={`/news/${news.slug}`}>{news.title}</a></h3>
-                  <p class="news-body-long">{stripHtmlTags(news.body).slice(0, 100)}...</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p>新しいお知らせはありません。</p>
-        )}
-        <div class="text-center mt-4">
-          <a href="/news" class="btn-primary">すべてのお知らせを見る</a>
-        </div>
+        <p class="hero-lead">人と地球が共に豊かになる未来を追求</p>
       </div>
     </section>
   </main>
@@ -156,90 +113,5 @@ const newsList: News[] = newsListResponse.contents || [];
 :root {
   --primary-color-darker: color-mix(in srgb, var(--primary-color) 80%, black);
   --accent-color: #aaffd6;
-}
-
-.latest-news-section {
-  padding: 60px 0;
-}
-.latest-news-section h2 {
-  font-size: 2em;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 40px;
-}
-.news-list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin-top: 40px;
-}
-.news-item-long {
-  display: flex;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.news-item-long:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-.news-thumbnail-link {
-  flex-shrink: 0;
-  width: 250px;
-  height: 150px;
-  display: block;
-}
-.news-thumbnail-long {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.news-content-long {
-  padding: 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.news-date {
-  font-size: 0.9em;
-  color: #7f8c8d;
-  margin-bottom: 5px;
-}
-.news-title-long {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-.news-title-long a {
-  color: var(--heading-color);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.news-title-long a:hover {
-  color: var(--primary-color);
-}
-.news-body-long {
-  font-size: 1em;
-  color: var(--text-color);
-  line-height: 1.6;
-}
-@media (max-width: 768px) {
-  .news-item-long {
-    flex-direction: column;
-  }
-  .news-thumbnail-link {
-    width: 100%;
-    height: 200px;
-  }
-  .news-content-long {
-    padding: 15px;
-  }
-  .news-title-long {
-    font-size: 1.2em;
-  }
 }
 </style>

@@ -1,89 +1,205 @@
 ---
-// ここにフロントマター（JavaScript）のコードがあればそのままにします。
+// このページは `src/layouts/Layout.astro` の `<header>` セクションのコードを置き換えることを想定しています。
+// フロントマター（JavaScript）のコードがあればそのままにします。
 ---
 
-<header>
-  <div class="container">
-    <div class="logo">
-      <a href="/">
-        <img src="/images/optiens-logo.png" alt="オプティエンスロゴ" class="header-logo" />
-      </a>
-    </div>
-    <nav>
-      <ul>
-        <li><a href="/">ホーム</a></li>
-        <li><a href="/about-us">企業理念</a></li>
-        <li><a href="/solutions">ソリューション</a></li>
-        <li><a href="/news">ニュース</a></li>
-        <li><a href="/contact">お問い合わせ</a></li>
-      </ul>
-    </nav>
-  </div>
+<header class="main-header">
+  <a href="/" class="header-logo-link">
+    <img src="/images/optiens-logo.png" alt="オプティエンスロゴ" class="header-logo" />
+  </a>
+  <nav class="desktop-nav">
+    <ul>
+      <li><a href="/">ホーム</a></li>
+      <li><a href="/about">会社情報</a></li>
+      <li><a href="/solutions">ソリューション</a></li>
+      <li><a href="/news">ニュース</a></li>
+      <li><a href="/contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
+  
+  <button id="menu-toggle" class="menu-button">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav id="sidebar-menu" class="sidebar-menu">
+    <ul>
+      <li><a href="/">ホーム</a></li>
+      <li><a href="/about">会社情報</a></li>
+      <li><a href="/solutions">ソリューション</a></li>
+      <li><a href="/news">ニュース</a></li>
+      <li><a href="/contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
 </header>
 
+<script is:inline>
+  // メニューの開閉を制御するJavaScript
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebarMenu = document.getElementById('sidebar-menu');
+
+  if (menuToggle && sidebarMenu) {
+    menuToggle.addEventListener('click', () => {
+      sidebarMenu.classList.toggle('is-open');
+      menuToggle.classList.toggle('is-active'); // ハンバーガーアイコンのアニメーション用
+    });
+
+    // メニュー内のリンクをクリックしたらメニューを閉じる
+    sidebarMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebarMenu.classList.remove('is-open');
+        menuToggle.classList.remove('is-active');
+      });
+    });
+  }
+</script>
+
 <style>
-  header {
-    background: linear-gradient(to right, #2e574c, #5ea89a);
-    color: #fff;
-    padding: 20px 0;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-  header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  .logo a {
-    display: block;
-  }
-  .header-logo {
-    height: 80px; /* ロゴの高さを指定。必要に応じて調整してください */
-  }
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  nav li {
-    margin-left: 30px;
-  }
-  nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-  }
-  nav a:hover {
-    color: var(--primary-color);
+  @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+  /* --- PC/タブレット用スタイル (769px以上) --- */
+  @media (min-width: 769px) {
+    .main-header {
+      width: 100%;
+      background: white;
+      padding: 20px 40px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .header-logo-link {
+      display: block;
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .header-logo {
+      height: 60px;
+      max-width: none;
+    }
+    .desktop-nav {
+      /* ナビゲーションは中央に配置される */
+    }
+    .desktop-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 30px;
+    }
+    .desktop-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 1.1em;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+    .desktop-nav a:hover {
+      color: var(--primary-color);
+    }
+    .menu-button, .sidebar-menu {
+      display: none;
+    }
   }
 
-  /* レスポンシブ対応 */
+  /* --- モバイル用スタイル (768px以下) --- */
   @media (max-width: 768px) {
-    header .container {
-      flex-direction: column;
-      align-items: flex-start;
+    .desktop-nav {
+      display: none;
     }
-    nav ul {
-      flex-direction: column;
+    .main-header {
+      position: fixed;
       width: 100%;
-      margin-top: 15px;
+      background: white;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    nav li {
-      margin: 10px 0;
-      width: 100%;
+    .menu-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1001;
+      width: 40px;
+      height: 30px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 0;
     }
-    nav a {
+    .menu-button span {
       display: block;
-      padding: 5px 0;
+      width: 100%;
+      height: 3px;
+      background-color: black;
+      transition: all 0.3s ease-in-out;
+      border-radius: 2px;
+    }
+    .menu-button.is-active span:nth-child(1) {
+      transform: translateY(13px) rotate(45deg);
+    }
+    .menu-button.is-active span:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-button.is-active span:nth-child(3) {
+      transform: translateY(-13px) rotate(-45deg);
+    }
+    .sidebar-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: rgba(46, 87, 76, 0.9);
+      transition: right 0.3s ease-out;
+      z-index: 1000;
+      padding-top: 80px;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+    }
+    .sidebar-menu.is-open {
+      right: 0;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 10px;
+    }
+    .sidebar-menu a {
+      display: block;
+      padding: 15px 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar-menu a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .header-logo-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      display: block;
+    }
+    .header-logo {
+      height: 60px;
+      max-width: none;
     }
   }
 </style>

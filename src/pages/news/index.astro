@@ -17,12 +17,11 @@ const { contents: newsList } = await client.get<MicroCMSListResponse<News>>({
   queries: { orders: '-publishedAt' }
 });
 ---
-<Layout title="最新情報 | オプティエンス">
+<Layout title="最新情報 | Optiens">
   <main>
     <section class="news-list-hero-section">
       <div class="container text-center">
-        <h1>お知らせ一覧</h1>
-        <p>オプティエンスからのお知らせです。</p>
+        <h1>ニュース</h1>
       </div>
     </section>
 

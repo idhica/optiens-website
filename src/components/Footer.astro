@@ -2,7 +2,7 @@
 ---
 <footer>
   <div class="container">
-    <p>&copy; {new Date().getFullYear()} OPTIENS. All rights reserved.</p>
+    <p>&copy; {new Date().getFullYear()} Optiens. All rights reserved.</p>
     <nav class="footer-nav">
       <ul>
         <li><a href="/privacy-policy">プライバシーポリシー</a></li>
@@ -14,17 +14,13 @@
 
 <style>
   footer {
-    /* ★変更点: ヘッダーと同じグラデーション、または濃い方の色 */
-    /* オプション1: ヘッダーと同じグラデーション */
-    background: linear-gradient(to right, #2e574c, #5ea89a);
-    /* オプション2: グラデーションの濃い方の色を単色で使用 (より落ち着いた印象) */
-    /* background-color: #2e574c; */
-
-    color: #ecf0f1; /* テキスト色を現在のものから変更なし */
+    background-color: white; /* 背景色を白に変更 */
+    color: #333; /* テキスト色をヘッダーと統一 */
     padding: 40px 0;
     text-align: center;
     font-size: 0.9em;
-    margin-top: auto; /* mainコンテンツが短い場合にフッターを最下部に押し出す */
+    margin-top: auto;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* ヘッダーと対称的な影を追加 */
   }
   footer .container {
     max-width: 1200px;
@@ -33,6 +29,7 @@
   }
   footer p {
     margin-bottom: 15px;
+    color: inherit; /* 親要素のテキスト色を継承 */
   }
   .footer-nav ul {
     list-style: none;
@@ -40,23 +37,20 @@
     padding: 0;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* 小画面で折り返す */
+    flex-wrap: wrap;
   }
   .footer-nav li {
     margin: 0 15px;
   }
   .footer-nav a {
-    color: #ecf0f1; /* ナビリンクも白系 */
+    color: #333; /* ナビリンクもヘッダーと統一 */
     text-decoration: none;
     transition: color 0.3s ease;
   }
   .footer-nav a:hover {
-    /* ★変更点: ヘッダーのホバー色に合わせるか、global.cssのprimary-color */
-    color: var(--primary-color); /* 例: #007bff */
-    /* あるいは、#B0E0E6 (パウダーブルー) など */
+    color: var(--primary-color);
   }
 
-  /* レスポンシブ対応は変更なし */
   @media (max-width: 768px) {
     .footer-nav li {
       margin: 5px 10px;
